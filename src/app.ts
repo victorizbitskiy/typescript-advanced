@@ -1,3 +1,5 @@
+// http://www.typescriptlang.org/docs/handbook/compiler-options.html#compiler-options
+
 const message: string = 'Hello world'
 
 class Person {
