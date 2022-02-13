@@ -41,3 +41,19 @@ console.log(withCount('Hello Typescript'))
 console.log(withCount([1, 2, 3, 4, 7]))
 // console.log(withCount(1)) // ошибка
 console.log(withCount({ length: 4 })) // ошибка
+
+// ====
+function getObjectValue<T extends Object, R extends keyof T>(obj: T, key: R) {
+  return obj[key]
+}
+
+const person = {
+  name: 'Victor',
+  age: 30,
+  job: 'Fullstack'
+}
+
+console.log(getObjectValue(person, 'name'))
+console.log(getObjectValue(person, 'age'))
+console.log(getObjectValue(person, 'job'))
+
