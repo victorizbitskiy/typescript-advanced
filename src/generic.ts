@@ -75,15 +75,15 @@ class Collection<T extends number | string | boolean> {
   }
 }
 
-const strings = new Collection<string>(['I', 'Am', 'Strings'])
-strings.add('!')
-strings.remove('Am')
-console.log(strings.items)
+// const strings = new Collection<string>(['I', 'Am', 'Strings'])
+// strings.add('!')
+// strings.remove('Am')
+// console.log(strings.items)
 
-const numbers = new Collection<number>([1, 2, 3])
-numbers.add(2)
-numbers.remove(2)
-console.log(numbers.items)
+// const numbers = new Collection<number>([1, 2, 3])
+// numbers.add(2)
+// numbers.remove(2)
+// console.log(numbers.items)
 
 // Объекты в эту коллекцию не сохранить, 
 // т.к. если передать в remove объект, то это будет новый объект, а не ссылка на существующий в коллекции
@@ -91,3 +91,36 @@ console.log(numbers.items)
 // const objects = new Collection<object>({ a: 1 }, { b: 2 })
 // objects.remove({a: 1})
 // console.log(objects.items)
+
+/// Partial
+interface Car {
+  model: string
+  year: number
+}
+
+function createAndValidateCar(model: string, year: number): Car {
+  const car: Partial<Car> = {}
+
+  if (model.length > 3) {
+    car.model = model
+  }
+
+  if (year > 2000) {
+    car.year = year
+  }
+
+  return car as Car
+}
+
+//// Readonly
+const cars: Readonly<Array<string>> = ['Ford', 'Audi']
+// cars.shift() 
+// cars[1] 
+
+const ford: Readonly<Car> = {
+  model : 'Ford',
+  year: 2020
+}
+
+// ford.model = 'Ferrari'
+
