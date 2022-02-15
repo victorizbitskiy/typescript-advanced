@@ -122,5 +122,5 @@ const ford: Readonly<Car> = {
   year: 2020
 }
 
-// ford.model = 'Ferrari'
+// ford.model = 'Ferrari' 
 
