@@ -62,6 +62,20 @@ function Component(config: ComponentDecorator) {
     }
   }
 }
+
+function Bind(_: any, _2: any, descriptor: PropertyDescriptor): PropertyDescriptor {
+
+  const original = descriptor.value // ссылка на метод logName
+
+  return {
+    configurable: true,
+    enumerable: false,
+    get() {
+      return original.bind(this)
+    }
+  }
+}
+
 @Component({
   selector: '#card',
   template: `
@@ -73,12 +87,17 @@ function Component(config: ComponentDecorator) {
   `
 })
 class CardComponent {
-  constructor(public name: string) {
-
-  }
+  constructor(public name: string) { }
+  
+  @Bind
   logName(): void {
     console.log(`Component Name: ${this.name}`)
   }
 }
 
 const card = new CardComponent('My Card Component')
+const btn = document.querySelector('#btn')
+
+// btn?.addEventListener('click', card.logName.bind(card))
+
+btn?.addEventListener('click', card.logName)

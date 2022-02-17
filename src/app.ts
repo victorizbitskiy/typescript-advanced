@@ -8,8 +8,8 @@ class Person {
 
 const max = new Person('Maxim')
 
-const btn = document.querySelector('#btn')!
+// const btn = document.querySelector('#btn')!
 
-btn.addEventListener('click', () => {
-  console.log('Button clicked')
-})
+// btn.addEventListener('click', () => {
+//   console.log('Button clicked')
+// })
