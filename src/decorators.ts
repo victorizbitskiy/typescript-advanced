@@ -43,61 +43,116 @@
 
 // ====
 
-interface ComponentDecorator {
-  selector: string
-  template: string
+// interface ComponentDecorator {
+//   selector: string
+//   template: string
+// }
+
+// function Component(config: ComponentDecorator) {
+//   return function
+//     <T extends { new(...args: any[]): object }>
+//     (Constructor: T) {
+//     return class extends Constructor {
+//       constructor(...args: any[]) {
+//         super(...args)
+
+//         const el = document.querySelector(config.selector)!
+//         el.innerHTML = config.template
+//       }
+//     }
+//   }
+// }
+
+// function Bind(_: any, _2: any, descriptor: PropertyDescriptor): PropertyDescriptor {
+
+//   const original = descriptor.value // ссылка на метод logName
+
+//   return {
+//     configurable: true,
+//     enumerable: false,
+//     get() {
+//       return original.bind(this)
+//     }
+//   }
+// }
+
+// @Component({
+//   selector: '#card',
+//   template: `
+//     <div class="card">
+//       <div class="card-content">
+//       <span class="card-title">Card Component</span>
+//       </div>
+//     </div>
+//   `
+// })
+// class CardComponent {
+//   constructor(public name: string) { }
+
+//   @Bind
+//   logName(): void {
+//     console.log(`Component Name: ${this.name}`)
+//   }
+// }
+
+// const card = new CardComponent('My Card Component')
+// const btn = document.querySelector('#btn')
+
+// // btn?.addEventListener('click', card.logName.bind(card))
+
+// btn?.addEventListener('click', card.logName)
+
+// ====
+
+type ValidatorType = 'required' | 'email'
+
+interface ValidatorConfig {
+  [prop: string]: {
+    [validateProp: string]: ValidatorType
+  }
 }
 
-function Component(config: ComponentDecorator) {
-  return function
-    <T extends { new(...args: any[]): object }>
-    (Constructor: T) {
-    return class extends Constructor {
-      constructor(...args: any[]) {
-        super(...args)
+// Объект, который хранит состояние о корректности полей
+const validators: ValidatorConfig = {}
 
-        const el = document.querySelector(config.selector)!
-        el.innerHTML = config.template
-      }
+function Required(target: any, propName: string) {
+  validators[target.constructor.name] = {
+    ...validators[target.constructor.name],
+    [propName]: 'required'
+  }
+}
+
+function validate(obj: any): boolean {
+  const objConfig = validators[obj.constructor.name]
+
+  if (!objConfig) {
+    return true
+  }
+
+  let isValid = true
+  Object.keys(objConfig).forEach(key => {
+    if (objConfig[key] === 'required') {
+      isValid = isValid && !!obj[key] // !! приведет к boolean
     }
+  })
+  return isValid
+
+}
+class Form {
+  @Required
+  public email: string | void
+
+  constructor(email?: string) {
+    this.email = email
   }
 }
 
-function Bind(_: any, _2: any, descriptor: PropertyDescriptor): PropertyDescriptor {
+const form = new Form('test@test.ru')
 
-  const original = descriptor.value // ссылка на метод logName
-
-  return {
-    configurable: true,
-    enumerable: false,
-    get() {
-      return original.bind(this)
-    }
-  }
+if (validate(form)) {
+  console.log('Valid', form)
+} else {
+  console.log('Validation Error')
 }
 
-@Component({
-  selector: '#card',
-  template: `
-    <div class="card">
-      <div class="card-content">
-      <span class="card-title">Card Component</span>
-      </div>
-    </div>
-  `
-})
-class CardComponent {
-  constructor(public name: string) { }
-  
-  @Bind
-  logName(): void {
-    console.log(`Component Name: ${this.name}`)
-  }
-}
-
-const card = new CardComponent('My Card Component')
-const btn = document.querySelector('#btn')
-
-// btn?.addEventListener('click', card.logName.bind(card))
-
-btn?.addEventListener('click', card.logName)
+console.log(form)
