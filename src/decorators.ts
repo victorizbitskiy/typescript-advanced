@@ -104,55 +104,55 @@
 
 // ====
 
-type ValidatorType = 'required' | 'email'
+// type ValidatorType = 'required' | 'email'
 
-interface ValidatorConfig {
-  [prop: string]: {
-    [validateProp: string]: ValidatorType
-  }
-}
+// interface ValidatorConfig {
+//   [prop: string]: {
+//     [validateProp: string]: ValidatorType
+//   }
+// }
 
-// Объект, который хранит состояние о корректности полей
-const validators: ValidatorConfig = {}
+// // Объект, который хранит состояние о корректности полей
+// const validators: ValidatorConfig = {}
 
-function Required(target: any, propName: string) {
-  validators[target.constructor.name] = {
-    ...validators[target.constructor.name],
-    [propName]: 'required'
-  }
-}
+// function Required(target: any, propName: string) {
+//   validators[target.constructor.name] = {
+//     ...validators[target.constructor.name],
+//     [propName]: 'required'
+//   }
+// }
 
-function validate(obj: any): boolean {
-  const objConfig = validators[obj.constructor.name]
+// function validate(obj: any): boolean {
+//   const objConfig = validators[obj.constructor.name]
 
-  if (!objConfig) {
-    return true
-  }
+//   if (!objConfig) {
+//     return true
+//   }
 
-  let isValid = true
-  Object.keys(objConfig).forEach(key => {
-    if (objConfig[key] === 'required') {
-      isValid = isValid && !!obj[key] // !! приведет к boolean
-    }
-  })
-  return isValid
+//   let isValid = true
+//   Object.keys(objConfig).forEach(key => {
+//     if (objConfig[key] === 'required') {
+//       isValid = isValid && !!obj[key] // !! приведет к boolean
+//     }
+//   })
+//   return isValid
 
-}
-class Form {
-  @Required
-  public email: string | void
+// }
+// class Form {
+//   @Required
+//   public email: string | void
 
-  constructor(email?: string) {
-    this.email = email
-  }
-}
+//   constructor(email?: string) {
+//     this.email = email
+//   }
+// }
 
-const form = new Form('test@test.ru')
+// const form = new Form('test@test.ru')
 
-if (validate(form)) {
-  console.log('Valid', form)
-} else {
-  console.log('Validation Error')
-}
+// if (validate(form)) {
+//   console.log('Valid', form)
+// } else {
+//   console.log('Validation Error')
+// }
 
-console.log(form)
+// console.log(form)
